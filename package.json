@@ -1,0 +1,84 @@
+{
+  "name": "dugganusa-threat-intel",
+  "displayName": "DugganUSA Threat Intel Scanner",
+  "description": "Scans code for IPs, domains, hashes, and CVEs — checks each against 1M+ indicators of compromise in real-time. Powered by the DugganUSA STIX feed trusted by 275+ organizations.",
+  "version": "0.1.0",
+  "publisher": "dugganusa",
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pduggusa/dugganusa-vscode"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Linters"
+  ],
+  "keywords": [
+    "security",
+    "threat-intelligence",
+    "IOC",
+    "malware",
+    "STIX",
+    "cybersecurity",
+    "supply-chain",
+    "CVE"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "DugganUSA Threat Intel",
+      "properties": {
+        "dugganusa.apiKey": {
+          "type": "string",
+          "default": "",
+          "description": "Your DugganUSA API key. Get one free at https://analytics.dugganusa.com/stix/register"
+        },
+        "dugganusa.scanOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan files for IOCs on save"
+        },
+        "dugganusa.scanOnOpen": {
+          "type": "boolean",
+          "default": true,
+          "description": "Automatically scan files when opened"
+        },
+        "dugganusa.apiUrl": {
+          "type": "string",
+          "default": "https://analytics.dugganusa.com/api/v1",
+          "description": "DugganUSA API base URL"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "dugganusa.scanFile",
+        "title": "DugganUSA: Scan Current File for Threat Indicators"
+      },
+      {
+        "command": "dugganusa.scanWorkspace",
+        "title": "DugganUSA: Scan Entire Workspace for Threat Indicators"
+      },
+      {
+        "command": "dugganusa.lookupSelection",
+        "title": "DugganUSA: Look Up Selected Text"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "dugganusa.lookupSelection",
+          "when": "editorHasSelection",
+          "group": "dugganusa"
+        }
+      ]
+    }
+  }
+}
