@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DugganUSA Threat Intel Scanner — VS Code Extension</title>
+  <meta name="description" content="Scan code for IPs, domains, hashes, and CVEs against 1M+ threat indicators. AIPM audit inside your editor. Free, open source, cross-platform.">
+  <meta property="og:title" content="DugganUSA Threat Intel Scanner for VS Code">
+  <meta property="og:description" content="1,080,000+ IOCs in your editor. Free.">
+  <meta property="og:url" content="https://pduggusa.github.io/dugganusa-vscode/">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="../icon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f1117;
+      --bg-card: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --text-muted: #8b949e;
+      --accent: #00d4aa;
+      --accent-dim: #00b894;
+      --red: #ff4757;
+      --blue: #58a6ff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .hero {
+      text-align: center;
+      padding: 80px 24px 60px;
+      background: linear-gradient(180deg, rgba(0,212,170,0.06) 0%, transparent 60%);
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, var(--accent), var(--blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p { color: var(--text-muted); font-size: 1.15rem; max-width: 600px; margin: 0 auto 2rem; }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--bg);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.2s;
+    }
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      top: -50%; left: -100%;
+      width: 60%; height: 200%;
+      background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.12) 45%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0.12) 55%, transparent 70%);
+      animation: shimmer 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+    @keyframes shimmer { 0%{left:-100%} 40%{left:120%} 100%{left:120%} }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,212,170,0.25); text-decoration: none; }
+    .btn-primary:hover::after { animation-duration: 1.5s; }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 0.85rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--accent); text-decoration: none; }
+
+    .buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 2rem; }
+
+    .beta-badge {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,71,87,0.1); border: 1px solid rgba(255,71,87,0.3);
+      padding: 0.3rem 0.8rem; border-radius: 100px;
+      font-size: 0.75rem; color: var(--red); font-weight: 600; letter-spacing: 0.05em;
+    }
+    .beta-badge .dot { width: 6px; height: 6px; background: var(--red); border-radius: 50%; animation: pulse 2s ease infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,71,87,0.4)} 50%{opacity:0.8;box-shadow:0 0 0 8px rgba(255,71,87,0)} }
+
+    .stats { display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; padding: 20px 24px 40px; }
+    .stat { text-align: center; }
+    .stat-val { font-size: 2rem; font-weight: 800; color: var(--accent); }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+
+    section { max-width: 900px; margin: 0 auto; padding: 40px 24px; }
+    h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 1.5rem; }
+    h3 { font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--accent); }
+
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+    .feature {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 24px;
+    }
+    .feature h3 { margin-top: 0; }
+    .feature p { color: var(--text-muted); font-size: 0.9rem; }
+
+    .code-block {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px;
+      font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; overflow-x: auto; margin: 1rem 0;
+    }
+    .code-warn { color: #e2b340; }
+    .code-info { color: var(--text-muted); }
+
+    .colors { display: flex; gap: 1rem; flex-wrap: wrap; margin: 1rem 0; }
+    .swatch { width: 80px; height: 80px; border-radius: 12px; display: flex; align-items: flex-end; padding: 6px; font-size: 0.65rem; font-family: 'JetBrains Mono', monospace; }
+
+    .integrations { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+    .integration {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 16px; text-align: center;
+    }
+    .integration .name { font-weight: 600; font-size: 0.95rem; }
+    .integration .status { font-size: 0.75rem; color: var(--text-muted); margin-top: 4px; }
+    .integration .status.live { color: var(--accent); }
+
+    .mothership {
+      text-align: center; padding: 60px 24px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0,212,170,0.04) 100%);
+      border-top: 1px solid var(--border);
+    }
+    .mothership h2 { color: var(--accent); }
+    .mothership-links { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem; }
+    .mothership-links a {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 12px 20px;
+      font-weight: 600; font-size: 0.9rem; transition: border-color 0.2s;
+    }
+    .mothership-links a:hover { border-color: var(--accent); text-decoration: none; }
+
+    footer { text-align: center; padding: 40px 24px; color: var(--text-muted); font-size: 0.8rem; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <h1>
+      <span class="gradient">1,080,000+ IOCs</span><br>
+      inside your code editor.
+    </h1>
+    <p>
+      Scan code for IPs, domains, hashes, and CVEs against the DugganUSA threat intelligence index.
+      AIPM audit any domain's AI presence. All inside VS Code. Free.
+    </p>
+    <div class="buttons">
+      <a href="https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel" class="btn-primary">
+        Install Extension &rarr;
+      </a>
+      <a href="https://github.com/pduggusa/dugganusa-vscode" class="btn-secondary">
+        View Source on GitHub
+      </a>
+    </div>
+    <span class="beta-badge"><span class="dot"></span>Beta — free while it lasts</span>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">1.08M+</div><div class="stat-label">Indicators</div></div>
+    <div class="stat"><div class="stat-val">275+</div><div class="stat-label">STIX Consumers</div></div>
+    <div class="stat"><div class="stat-val">46</div><div class="stat-label">Countries</div></div>
+    <div class="stat"><div class="stat-val">44</div><div class="stat-label">Cross-Indexes</div></div>
+    <div class="stat"><div class="stat-val">5</div><div class="stat-label">Commands</div></div>
+  </div>
+
+  <section>
+    <h2>What You See In Your Editor</h2>
+    <div class="code-block">
+      <span class="code-info">// config.js — line 42</span><br>
+      <span>const API_ENDPOINT = "</span><span class="code-warn" style="text-decoration: wavy underline #e2b340;">185.39.19.176</span><span>";</span><br>
+      <br>
+      <span class="code-warn">⚠ DugganUSA: 185.39.19.176 — IOC: Cobalt Strike C2 (via SSLBL) | Blocked 47x | In 3 OTX pulse(s) (12 cross-index hits)</span>
+    </div>
+    <p style="color: var(--text-muted);">Every IP, domain, SHA256 hash, and CVE ID in your code — checked against 1.08M+ indicators in real-time. Known-bad indicators appear as inline warnings with enrichment details.</p>
+  </section>
+
+  <section>
+    <h2>Features</h2>
+    <div class="features">
+      <div class="feature">
+        <h3>Auto-Scan</h3>
+        <p>Scans on open and on save. No manual step. IOCs are checked as you work.</p>
+      </div>
+      <div class="feature">
+        <h3>Right-Click Lookup</h3>
+        <p>Select any text. Right-click. Instant enrichment from 44 cross-correlated indexes.</p>
+      </div>
+      <div class="feature">
+        <h3>AIPM Audit</h3>
+        <p>Audit any domain's AI presence directly inside VS Code. 5 models. 7 signals. 15 seconds.</p>
+      </div>
+      <div class="feature">
+        <h3>Workspace Scan</h3>
+        <p>Scan your entire project for threat indicators. One command. Up to 50 files.</p>
+      </div>
+      <div class="feature">
+        <h3>Cross-Platform</h3>
+        <p>Windows, macOS, Linux, WSL, Remote SSH, Codespaces, vscode.dev. Also works on Cursor and Windsurf.</p>
+      </div>
+      <div class="feature">
+        <h3>Privacy-First</h3>
+        <p>Only IOC values sent to the API. Never source code. Never file paths. Open source — inspect the code.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Brand Guide</h2>
+
+    <h3>Colors</h3>
+    <div class="colors">
+      <div class="swatch" style="background:#00d4aa;color:#0f1117">#00d4aa<br>Accent</div>
+      <div class="swatch" style="background:#0f1117;color:#c9d1d9;border:1px solid #30363d">#0f1117<br>BG</div>
+      <div class="swatch" style="background:#161b22;color:#c9d1d9;border:1px solid #30363d">#161b22<br>Card</div>
+      <div class="swatch" style="background:#ff4757;color:#fff">#ff4757<br>Alert</div>
+      <div class="swatch" style="background:#58a6ff;color:#0f1117">#58a6ff<br>Link</div>
+      <div class="swatch" style="background:#c9d1d9;color:#0f1117">#c9d1d9<br>Text</div>
+      <div class="swatch" style="background:#8b949e;color:#0f1117">#8b949e<br>Muted</div>
+    </div>
+
+    <h3>Typography</h3>
+    <p><strong>Headings:</strong> Inter 700/800 · <strong>Body:</strong> Inter 400/500 · <strong>Code:</strong> JetBrains Mono 400/600</p>
+
+    <h3>The Shimmer</h3>
+    <p>Primary CTAs use a sweeping light animation (CSS <code>shimmer</code> keyframe) that mimics water reflection — triggers the lizard brain's attention-seeking firmware. 4s cycle, accelerates to 1.5s on hover. Applied to all <code>.btn-primary</code> elements across DugganUSA properties.</p>
+
+    <h3>Voice</h3>
+    <p>Direct. Technical. Named entities. Specific numbers. Opinions stated flat, not hedged. "We had the CVE before they published" not "we may have had early visibility." Lead with receipts. The 95% epistemic humility cap means we never claim perfection — but we don't apologize for being fast.</p>
+  </section>
+
+  <section>
+    <h2>Planned Integrations</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1rem;">Same engine. Every surface where developers and security teams work.</p>
+    <div class="integrations">
+      <div class="integration"><div class="name">VS Code</div><div class="status live">✅ Live</div></div>
+      <div class="integration"><div class="name">Cursor</div><div class="status live">✅ Compatible</div></div>
+      <div class="integration"><div class="name">Windsurf</div><div class="status live">✅ Compatible</div></div>
+      <div class="integration"><div class="name">Chrome</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Firefox</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">JetBrains</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Neovim</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Slack Bot</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Teams Bot</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Jira</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Splunk TA</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Sentinel</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Elastic</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">GitHub Action</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">CLI (npm)</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Obsidian</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Maltego</div><div class="status">Planned</div></div>
+      <div class="integration"><div class="name">Raycast</div><div class="status">Planned</div></div>
+    </div>
+  </section>
+
+  <div class="mothership">
+    <h2>Part of the DugganUSA Ecosystem</h2>
+    <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto 1.5rem;">
+      The VS Code extension is one surface of the DugganUSA threat intelligence platform.
+      Same IOC index. Same STIX feed. Same team. Different distribution.
+    </p>
+    <div class="mothership-links">
+      <a href="https://www.dugganusa.com">dugganusa.com<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">1,734+ threat intel posts</span></a>
+      <a href="https://aipmsec.com">aipmsec.com<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">AI Presence Management</span></a>
+      <a href="https://analytics.dugganusa.com/api/v1/stix-feed">STIX Feed<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">275+ consumers, 46 countries</span></a>
+      <a href="https://analytics.dugganusa.com/stix/register">Get API Key<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">Free. No credit card.</span></a>
+      <a href="https://epstein.dugganusa.com">Epstein Archive<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">400K+ DOJ documents</span></a>
+      <a href="https://github.com/pduggusa/dugganusa-edge-shield">Edge Shield<br><span style="font-weight:400;font-size:0.75rem;color:var(--text-muted)">Cloudflare Worker security</span></a>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      Built by <a href="https://www.dugganusa.com">DugganUSA LLC</a> — Minneapolis, MN.
+      Two people, one AI partner, $75/month infrastructure.
+      <br>
+      <a href="https://github.com/pduggusa/dugganusa-vscode">GitHub</a> ·
+      <a href="https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel">VS Code Marketplace</a> ·
+      <a href="https://bsky.app/profile/hakksaww.bsky.social">Bluesky</a> ·
+      MIT License
+    </p>
+  </footer>
+
+</body>
+</html>
