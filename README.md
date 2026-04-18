@@ -186,6 +186,100 @@ Also available as [STIX 2.1 JSON](https://analytics.dugganusa.com/api/v1/stix-fe
 
 ---
 
+## Compatibility
+
+This extension works out of the box on VS Code and VS Code forks:
+
+| Editor | Status | Notes |
+|--------|--------|-------|
+| **[VS Code](https://code.visualstudio.com/)** | ✅ Supported | Primary target |
+| **[Cursor](https://cursor.sh/)** | ✅ Compatible | Uses VS Code extension API natively |
+| **[Windsurf](https://codeium.com/windsurf)** | ✅ Compatible | VS Code fork, extensions work directly |
+| **[VS Code for the Web](https://vscode.dev)** | ✅ Compatible | Runs in browser |
+| **[GitHub Codespaces](https://github.com/features/codespaces)** | ✅ Compatible | Cloud VS Code |
+
+---
+
+## Planned Integrations — Same Engine, More Surfaces
+
+The DugganUSA threat intel scanning engine is designed to run anywhere developers and security teams work. The same IOC detection + API correlation pattern ports to every platform below. Contributions welcome.
+
+### IDEs & Editors
+
+| Platform | Marketplace | Status | Notes |
+|----------|-------------|--------|-------|
+| **[JetBrains](https://plugins.jetbrains.com/)** (IntelliJ, PyCharm, WebStorm, GoLand, Rider) | [JetBrains Marketplace](https://plugins.jetbrains.com/) | Planned | Java/Kotlin plugin, same regex + API pattern. Huge enterprise developer base. |
+| **[Neovim](https://neovim.io/) / Vim** | Native Lua plugin or [coc.nvim](https://github.com/neoclide/coc.nvim) | Planned | Terminal crowd. Small numbers, loudest advocates. |
+| **[Sublime Text](https://www.sublimetext.com/)** | [Package Control](https://packagecontrol.io/) | Planned | Still has loyalists. |
+| **[Eclipse](https://www.eclipse.org/)** | [Eclipse Marketplace](https://marketplace.eclipse.org/) | Planned | Enterprise Java shops, government contractors. |
+| **[Zed](https://zed.dev/)** | Zed Extensions | Planned | Fast-growing editor with extension API. |
+| **[JupyterLab](https://jupyter.org/)** | [PyPI](https://pypi.org/) | Planned | Threat researchers live in notebooks. |
+
+### Browsers
+
+| Platform | Marketplace | Status | Notes |
+|----------|-------------|--------|-------|
+| **Chrome** | [Chrome Web Store](https://chromewebstore.google.com/) | Planned | Every webpage becomes an IOC scanner. Highlights indicators on any page you read — including competitor blogs. |
+| **Firefox** | [Firefox Add-ons](https://addons.mozilla.org/) | Planned | Same extension, WebExtension API compatible. |
+| **Safari** | [Safari Extensions](https://developer.apple.com/safari/extensions/) | Planned | macOS/iOS coverage. |
+
+### Collaboration & Workflow
+
+| Platform | Marketplace | Status | Notes |
+|----------|-------------|--------|-------|
+| **[Slack](https://api.slack.com/apps)** | Slack App Directory | Planned | Paste an IP in any channel, bot responds with enrichment. Enterprise-viral. |
+| **[Microsoft Teams](https://appsource.microsoft.com/)** | AppSource | Planned | We already see 23 Teams referrer sessions — people WANT this. |
+| **[Jira](https://marketplace.atlassian.com/)** | Atlassian Marketplace | Planned | We see `jira.cs.sys` referrers. Enrich security tickets with IOC context automatically. |
+| **[ServiceNow](https://store.servicenow.com/)** | ServiceNow Store | Planned | Enterprise ITSM integration. |
+| **[Obsidian](https://obsidian.md/)** | [Community Plugins](https://obsidian.md/plugins) | Planned | OSINT researchers write notes in Obsidian. Paste an IP, get enrichment inline. |
+| **[Notion](https://www.notion.so/)** | API integration | Planned | Research documentation with inline IOC validation. |
+
+### SIEM & Security Platforms
+
+| Platform | Marketplace | Status | Notes |
+|----------|-------------|--------|-------|
+| **[Splunk](https://www.splunk.com/)** | [Splunkbase](https://splunkbase.splunk.com/) | Planned | Technology Add-on pulling STIX feed, CIM field mappings. |
+| **[Microsoft Sentinel](https://azure.microsoft.com/en-us/products/microsoft-sentinel)** | [Content Hub](https://learn.microsoft.com/en-us/azure/sentinel/sentinel-solutions-catalog) | Planned | Data Connector via TAXII 2.1 endpoint. |
+| **[Elastic / OpenSearch](https://www.elastic.co/)** | [Elastic Integrations](https://www.elastic.co/integrations) | Planned | Filebeat module + Kibana dashboard. |
+| **[TheHive / Cortex](https://thehive-project.org/)** | Cortex Analyzers | Planned | Auto-enrich observables in incident response. |
+| **[Maltego](https://www.maltego.com/)** | Maltego Transform Hub | Planned | Drag an IP onto the canvas, get DugganUSA enrichment. |
+
+### Data & Productivity
+
+| Platform | Marketplace | Status | Notes |
+|----------|-------------|--------|-------|
+| **[Google Sheets](https://workspace.google.com/marketplace)** | Workspace Marketplace | Planned | Add-on that enriches columns of IOCs in bulk. SOC analysts export to spreadsheets constantly. |
+| **[Excel](https://appsource.microsoft.com/)** | AppSource | Planned | Same bulk enrichment for Microsoft shops. |
+| **[n8n](https://n8n.io/) / [Zapier](https://zapier.com/) / [Make](https://www.make.com/)** | Native integrations | Planned | Trigger workflows on new IOCs, auto-block in firewall, alert on critical. |
+
+### CLI & DevOps
+
+| Platform | Distribution | Status | Notes |
+|----------|-------------|--------|-------|
+| **CLI tool** | [npm](https://www.npmjs.com/) | Planned | `npx dugganusa-lookup 185.39.19.176` — works in any terminal, any OS, any CI pipeline. |
+| **GitHub Action** | [GitHub Marketplace](https://github.com/marketplace?type=actions) | Planned | PR checks that scan committed code for IOCs before merge. |
+| **GitLab CI** | GitLab CI template | Planned | Same scanning in GitLab pipelines. |
+| **Docker** | [Docker Hub](https://hub.docker.com/) | Planned | Containerized scanner for CI/CD integration. |
+
+### Desktop Launchers
+
+| Platform | Distribution | Status | Notes |
+|----------|-------------|--------|-------|
+| **[Raycast](https://www.raycast.com/)** | Raycast Store | Planned | macOS — type an IP, get enrichment instantly. |
+| **[Alfred](https://www.alfredapp.com/)** | Alfred Gallery | Planned | macOS workflow for power users. |
+
+---
+
+## Want to Help Build One?
+
+Every integration above uses the same core pattern: **extract IOC → call API → render result**. The DugganUSA correlation API is open and documented. If you want to build one of these integrations, open an issue or PR.
+
+API docs: [analytics.dugganusa.com/api/v1/search/stats](https://analytics.dugganusa.com/api/v1/search/stats)
+
+Free API key: [analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register)
+
+---
+
 ## Development
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, testing, and publishing.
