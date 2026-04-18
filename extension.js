@@ -321,7 +321,35 @@ function activate(context) {
         totalHits + ' threat indicator(s) found.'
       );
     }),
-    vscode.commands.registerCommand('dugganusa.lookupSelection', lookupSelection)
+    vscode.commands.registerCommand('dugganusa.lookupSelection', lookupSelection),
+    vscode.commands.registerCommand('dugganusa.aipmAudit', async () => {
+      const domain = await vscode.window.showInputBox({
+        prompt: 'Enter a domain to audit with AIPM',
+        placeHolder: 'yourcompany.com',
+        validateInput: (v) => {
+          const d = v.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '');
+          return d && d.includes('.') ? null : 'Enter a valid domain (e.g. google.com)';
+        }
+      });
+      if (!domain) return;
+      const clean = domain.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '');
+      // Open AIPM audit inside VS Code using Simple Browser
+      const auditUrl = 'https://aipmsec.com/audit.html?domain=' + encodeURIComponent(clean);
+      try {
+        await vscode.commands.executeCommand('simpleBrowser.api.open', vscode.Uri.parse(auditUrl));
+      } catch {
+        // Fallback to external browser if Simple Browser not available
+        vscode.env.openExternal(vscode.Uri.parse(auditUrl));
+      }
+    }),
+    vscode.commands.registerCommand('dugganusa.openStixFeed', () => {
+      try {
+        vscode.commands.executeCommand('simpleBrowser.api.open',
+          vscode.Uri.parse('https://analytics.dugganusa.com/stix/pricing'));
+      } catch {
+        vscode.env.openExternal(vscode.Uri.parse('https://analytics.dugganusa.com/stix/pricing'));
+      }
+    })
   );
 
   // Auto-scan on open

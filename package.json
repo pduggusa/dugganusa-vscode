@@ -69,6 +69,14 @@
       {
         "command": "dugganusa.lookupSelection",
         "title": "DugganUSA: Look Up Selected Text"
+      },
+      {
+        "command": "dugganusa.aipmAudit",
+        "title": "DugganUSA: AIPM Audit — How Does AI See This Domain?"
+      },
+      {
+        "command": "dugganusa.openStixFeed",
+        "title": "DugganUSA: Open STIX Feed & Pricing"
       }
     ],
     "menus": {
