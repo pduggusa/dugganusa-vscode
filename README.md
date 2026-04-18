@@ -2,7 +2,7 @@
 
 **Scan your code for threat indicators in real-time. 1,080,000+ IOCs. Cross-platform. Free.**
 
-[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=dugganusa.dugganusa-threat-intel)
+[![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![STIX Consumers](https://img.shields.io/badge/STIX%20Consumers-275%2B-brightgreen)](https://analytics.dugganusa.com/api/v1/stix-feed)
 
@@ -49,6 +49,8 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 | **First-run setup** | Welcome walkthrough guides you through API key configuration |
 | **Prerequisite checks** | Validates API connectivity and key format on activation |
 | **Privacy-first** | Only IOC values are sent to the API — never source code, file paths, or file contents |
+| **AIPM Audit** | Audit any domain's AI presence right inside VS Code — 5 models, 7 signals, 15 seconds |
+| **STIX Feed access** | Browse STIX feed pricing and registration without leaving your editor |
 
 ---
 
@@ -63,7 +65,7 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 
 **From the command line:**
 ```bash
-code --install-extension dugganusa.dugganusa-threat-intel
+code --install-extension DugganUSALLC.dugganusa-threat-intel
 ```
 
 For more on installing extensions, see the [VS Code Extension Marketplace docs](https://code.visualstudio.com/docs/editor/extension-marketplace).
@@ -112,6 +114,8 @@ Open the **Command Palette** (Ctrl+Shift+P / Cmd+Shift+P):
 | `DugganUSA: Scan Current File` | Scan the active file now |
 | `DugganUSA: Scan Entire Workspace` | Scan up to 50 project files |
 | `DugganUSA: Look Up Selected Text` | Right-click or palette lookup |
+| `DugganUSA: AIPM Audit` | Audit any domain's AI presence — opens inside VS Code |
+| `DugganUSA: Open STIX Feed & Pricing` | Browse STIX feed tiers in-editor |
 
 ---
 
@@ -201,7 +205,7 @@ See [VS Code Extension API](https://code.visualstudio.com/api) and [Publishing E
 
 | Resource | URL |
 |----------|-----|
-| VS Code Marketplace | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=dugganusa.dugganusa-threat-intel) |
+| VS Code Marketplace | [marketplace.visualstudio.com](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel) |
 | GitHub | [github.com/pduggusa/dugganusa-vscode](https://github.com/pduggusa/dugganusa-vscode) |
 | DugganUSA | [dugganusa.com](https://www.dugganusa.com) |
 | AIPM Security | [aipmsec.com](https://aipmsec.com) |
