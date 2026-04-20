@@ -7,6 +7,7 @@ const PATTERNS = {
   domain: /\b(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:com|net|org|io|ai|dev|xyz|info|biz|co|me|app|cloud|online|site|tech|ru|cn|ir|kp)\b/gi,
   sha256: /\b[a-fA-F0-9]{64}\b/g,
   cve: /CVE-\d{4}-\d{4,7}/gi,
+  onion: /\b[a-z2-7]{56}\.onion\b/g,
 };
 
 // Skip common false-positive IPs
@@ -189,6 +190,72 @@ async function scanDocument(document) {
 }
 
 /**
+ * Check if an IP is a known Tor relay.
+ */
+async function checkTorRelay() {
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) return;
+
+  const selection = editor.selection;
+  const ip = editor.document.getText(selection).trim();
+  if (!ip) {
+    vscode.window.showInformationMessage('DugganUSA: Select an IP address to check for Tor relay.');
+    return;
+  }
+
+  const config = vscode.workspace.getConfiguration('dugganusa');
+  const apiKey = config.get('apiKey', '');
+  const apiUrl = config.get('apiUrl', 'https://analytics.dugganusa.com/api/v1');
+
+  vscode.window.withProgress({
+    location: vscode.ProgressLocation.Notification,
+    title: 'DugganUSA: Checking Tor relay status for ' + ip + '...',
+    cancellable: false
+  }, async () => {
+    return new Promise((resolve) => {
+      const searchUrl = new URL(apiUrl + '/tor/relays');
+      searchUrl.searchParams.set('q', ip);
+      searchUrl.searchParams.set('limit', '1');
+
+      const headers = {};
+      if (apiKey) headers['Authorization'] = 'Bearer ' + apiKey;
+
+      const req = https.get(searchUrl.toString(), { headers }, (res) => {
+        let body = '';
+        res.on('data', chunk => body += chunk);
+        res.on('end', () => {
+          try {
+            const json = JSON.parse(body);
+            const relays = json.data?.relays || json.data || [];
+            if (Array.isArray(relays) && relays.length > 0) {
+              const r = relays[0];
+              const info = [
+                r.nickname ? 'Nickname: ' + r.nickname : null,
+                r.flags ? 'Flags: ' + (Array.isArray(r.flags) ? r.flags.join(', ') : r.flags) : null,
+                r.country ? 'Country: ' + r.country : null,
+                r.as_number || r.asn ? 'ASN: ' + (r.as_number || r.asn) : null,
+                r.bandwidth ? 'Bandwidth: ' + r.bandwidth : null,
+              ].filter(Boolean).join(' | ');
+              vscode.window.showWarningMessage('DugganUSA Tor: ' + ip + ' IS a relay. ' + info);
+            } else {
+              vscode.window.showInformationMessage('DugganUSA Tor: ' + ip + ' is NOT a known Tor relay.');
+            }
+          } catch {
+            vscode.window.showErrorMessage('DugganUSA: Failed to parse Tor relay response.');
+          }
+          resolve();
+        });
+      });
+      req.on('error', () => {
+        vscode.window.showErrorMessage('DugganUSA: Could not reach Tor relay API.');
+        resolve();
+      });
+      req.setTimeout(5000, () => { req.destroy(); resolve(); });
+    });
+  });
+}
+
+/**
  * Look up selected text interactively.
  */
 async function lookupSelection() {
@@ -322,6 +389,7 @@ function activate(context) {
       );
     }),
     vscode.commands.registerCommand('dugganusa.lookupSelection', lookupSelection),
+    vscode.commands.registerCommand('dugganusa.checkTorRelay', checkTorRelay),
     vscode.commands.registerCommand('dugganusa.aipmAudit', async () => {
       const domain = await vscode.window.showInputBox({
         prompt: 'Enter a domain to audit with AIPM',
