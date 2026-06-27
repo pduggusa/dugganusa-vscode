@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0 (2026-06-27)
+
+### Documentation & Feed-Awareness
+
+- **Feed-quality validation, now provable live.** README now surfaces the three live, no-auth, durable validation endpoints behind the corpus your editor queries: novelty ([feed-uniqueness](https://analytics.dugganusa.com/api/v1/feed-uniqueness), ~75%+ not in ThreatFox), timeliness ([kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead), ~31 days ahead of CISA KEV), and accuracy ([spamhaus-validation](https://analytics.dugganusa.com/api/v1/spamhaus-validation), independently corroborated).
+- **API-key enforcement corrected.** The STIX feed is now API-key-enforced (anonymous → 401, unregistered Bearer → 429). Docs no longer imply the extension works without a key; the free tier is a free *registered* key. Register at [analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register).
+- **IOC count aligned to 1.10M+** across README and changelog.
+- **CLI reference fixed** — `npx dugganusa-cli` (the `dugganusa-lookup` package is retired).
+
 ## 0.2.0 (2026-04-17)
 
 ### New Features
@@ -20,7 +29,7 @@
 - Auto-scan on save and open for IPs, domains, SHA256 hashes, CVE IDs
 - Right-click context menu: "DugganUSA: Look Up Selected Text"
 - Workspace-wide scan command (up to 50 files)
-- Cross-index correlation against 1.08M+ IOC database (44 indexes)
+- Cross-index correlation against 1.10M+ IOC database (44 indexes)
 - 5-minute result cache to minimize API calls
 - Smart false-positive filtering (skips localhost, DNS resolvers, common platform domains)
 - First-run welcome with API key setup guidance and registration link

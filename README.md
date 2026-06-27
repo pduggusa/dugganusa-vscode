@@ -1,6 +1,6 @@
 # DugganUSA Threat Intel Scanner for VS Code
 
-**Scan your code for threat indicators in real-time. 1,080,000+ IOCs. Cross-platform. Free.**
+**Scan your code for threat indicators in real-time. 1.10M+ IOCs. Cross-platform. Free registered key.**
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -54,6 +54,18 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 
 ---
 
+## Why This Intel Is Worth Trusting — Now Provable Live
+
+The IOC and CVE enrichment you see inline is only as good as the corpus behind it. As of this release, the DugganUSA platform exposes **three live, no-auth, durable validation endpoints** that let you (and your auditors) check feed quality for yourself — they survive deploys, so the numbers are real:
+
+- **Novelty** — [/api/v1/feed-uniqueness](https://analytics.dugganusa.com/api/v1/feed-uniqueness): measured live, roughly **75%+ of what we publish is NOT in ThreatFox**. The hits you catch in your editor are largely ones other feeds miss.
+- **Timeliness** — [/api/v1/kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead): on average we flag exploited CVEs about **31 days ahead of CISA KEV**. That `CVE-2026-21643` warning can land well before it shows up in the official catalog.
+- **Accuracy** — [/api/v1/spamhaus-validation](https://analytics.dugganusa.com/api/v1/spamhaus-validation): Spamhaus **independently corroborates** our first-hand contributions, an external accuracy signal on the calls we make.
+
+In short: the intel surfaced in your editor is sourced from a corpus that is independently **novel**, **early**, and **corroborated**. We cap our own claims at 95% honest confidence — there is always some noise, and we'd rather say so.
+
+---
+
 ## Getting Started
 
 ### 1. Install the Extension
@@ -70,11 +82,11 @@ code --install-extension DugganUSALLC.dugganusa-threat-intel
 
 For more on installing extensions, see the [VS Code Extension Marketplace docs](https://code.visualstudio.com/docs/editor/extension-marketplace).
 
-### 2. Get Your API Key (Free)
+### 2. Get Your Free API Key (Required)
 
 Visit **[analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register)**. No credit card. No login. Takes 30 seconds.
 
-The extension works without a key at reduced rate limits, but an API key unlocks full query volume.
+The DugganUSA feed is **API-key-enforced**. Anonymous requests return `401`; an unregistered Bearer token returns `429`. The free tier is a **free registered key** — not anonymous access — so register first, then drop the key into your settings. The free key covers full query volume for normal in-editor use.
 
 ### 3. Configure
 
@@ -160,7 +172,7 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 
 ## What's In The Index
 
-**1,080,000+ indicators** from:
+**1.10M+ indicators** from:
 
 - [OTX AlienVault](https://otx.alienvault.com/user/pduggusa) (16,800+ pulses)
 - [abuse.ch SSLBL](https://sslbl.abuse.ch/) + [URLhaus](https://urlhaus.abuse.ch/)
@@ -256,7 +268,7 @@ The DugganUSA threat intel scanning engine is designed to run anywhere developer
 
 | Platform | Distribution | Status | Notes |
 |----------|-------------|--------|-------|
-| **CLI tool** | [npm](https://www.npmjs.com/) | Planned | `npx dugganusa-lookup 185.39.19.176` — works in any terminal, any OS, any CI pipeline. |
+| **CLI tool** | [npm](https://www.npmjs.com/) | Available | `npx dugganusa-cli 185.39.19.176` — works in any terminal, any OS, any CI pipeline. |
 | **GitHub Action** | [GitHub Marketplace](https://github.com/marketplace?type=actions) | Planned | PR checks that scan committed code for IOCs before merge. |
 | **GitLab CI** | GitLab CI template | Planned | Same scanning in GitLab pipelines. |
 | **Docker** | [Docker Hub](https://hub.docker.com/) | Planned | Containerized scanner for CI/CD integration. |
