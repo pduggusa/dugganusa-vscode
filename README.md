@@ -1,6 +1,6 @@
 # DugganUSA Threat Intel Scanner for VS Code
 
-**Scan your code for threat indicators in real-time. 1.10M+ IOCs. Cross-platform. Free registered key.**
+**Scan your code for threat indicators in real-time. 1.5M+ IOCs. Cross-platform. Free registered key.**
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -56,13 +56,14 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 
 ## Why This Intel Is Worth Trusting — Now Provable Live
 
-The IOC and CVE enrichment you see inline is only as good as the corpus behind it. As of this release, the DugganUSA platform exposes **three live, no-auth, durable validation endpoints** that let you (and your auditors) check feed quality for yourself — they survive deploys, so the numbers are real:
+The IOC and CVE enrichment you see inline is only as good as the corpus behind it. As of this release, the DugganUSA platform exposes **four live, no-auth, durable validation endpoints** that let you (and your auditors) check feed quality for yourself — they survive deploys, so the numbers are real:
 
 - **Novelty** — [/api/v1/feed-uniqueness](https://analytics.dugganusa.com/api/v1/feed-uniqueness): measured live, roughly **75%+ of what we publish is NOT in ThreatFox**. The hits you catch in your editor are largely ones other feeds miss.
-- **Timeliness** — [/api/v1/kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead): on average we flag exploited CVEs about **31 days ahead of CISA KEV**. That `CVE-2026-21643` warning can land well before it shows up in the official catalog.
+- **Timeliness** — [/api/v1/kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead): a live ledger of how far ahead of CISA KEV we flagged each exploited CVE — positive leads, same-day, and no-receipt all shown honestly, with receipts. That `CVE-2026-21643` warning can land well before it shows up in the official catalog.
 - **Accuracy** — [/api/v1/spamhaus-validation](https://analytics.dugganusa.com/api/v1/spamhaus-validation): Spamhaus **independently corroborates** our first-hand contributions, an external accuracy signal on the calls we make.
+- **Liveness** — [/api/v1/feed-efficacy](https://analytics.dugganusa.com/api/v1/feed-efficacy): opt-in consumer reports of when our indicators actually fire on real traffic — proof the feed is operationally live, not just large.
 
-In short: the intel surfaced in your editor is sourced from a corpus that is independently **novel**, **early**, and **corroborated**. We cap our own claims at 95% honest confidence — there is always some noise, and we'd rather say so.
+In short: the intel surfaced in your editor is sourced from a corpus that is independently **novel**, **early**, **corroborated**, and provably **live**. We cap our own claims at 95% honest confidence — there is always some noise, and we'd rather say so.
 
 ---
 
@@ -172,7 +173,7 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 
 ## What's In The Index
 
-**1.10M+ indicators** from:
+**1.5M+ indicators** from:
 
 - [OTX AlienVault](https://otx.alienvault.com/user/pduggusa) (16,800+ pulses)
 - [abuse.ch SSLBL](https://sslbl.abuse.ch/) + [URLhaus](https://urlhaus.abuse.ch/)
@@ -182,7 +183,7 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 - Exploit harvester (84 rules, GitHub scanning every 6h)
 - Edge honeypots (30 canary paths on Cloudflare Workers)
 
-Cross-correlated across **44 indexes**.
+Cross-correlated across **65 indexes**.
 
 Also available as [STIX 2.1 JSON](https://analytics.dugganusa.com/api/v1/stix-feed), [IP blocklist CSV](https://analytics.dugganusa.com/api/v1/stix-feed/ips.csv), [Domain CSV](https://analytics.dugganusa.com/api/v1/stix-feed/domains.csv), [Hash CSV](https://analytics.dugganusa.com/api/v1/stix-feed/hashes.csv).
 
