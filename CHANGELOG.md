@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.5.2] - 2026-06-30
+
+### Fixed
+- Aligned in-tool/runtime IOC-count strings to 1.5M+ (the v0.5.1 docs refresh updated the README but missed the strings the tool prints at runtime).
+
 ## 0.5.1 (2026-06-30)
 
 ### Added

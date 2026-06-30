@@ -292,7 +292,7 @@ async function lookupSelection() {
       }
     } else {
       vscode.window.showInformationMessage(
-        'DugganUSA: ' + text + ' — not found in 1.10M+ IOC index. Clean.'
+        'DugganUSA: ' + text + ' — not found in 1.5M+ IOC index. Clean.'
       );
     }
   });
@@ -344,7 +344,7 @@ async function runPrerequisiteChecks() {
   if (!hasSeenWelcome) {
     const action = await vscode.window.showInformationMessage(
       'DugganUSA Threat Intel Scanner installed! ' +
-      'Scans code for IPs, domains, hashes, and CVEs against 1.10M+ indicators. ' +
+      'Scans code for IPs, domains, hashes, and CVEs against 1.5M+ indicators. ' +
       (apiKey ? 'API key configured.' : 'Register a free API key in Settings — the feed is API-key-enforced.'),
       apiKey ? 'Got it' : 'Get Free API Key',
       'Open Settings'
