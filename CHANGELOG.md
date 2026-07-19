@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.6.0] - 2026-07-19
+
+### Security
+- **Fixed a fail-open defect: a failed lookup was reported as "clean".** `lookupIOC` resolved a bare `{ found: false }` on all four failure paths — JSON parse error, request error, the 5s timeout, and (implicitly) any HTTP error status. That is byte-identical to a verified-clean result, so an expired API key, a 429, or an API outage rendered as "clean" in the status bar and "not found in 1.5M+ IOC index. Clean." on an interactive lookup. Absence of evidence is not evidence of safety.
+- Lookups are now tri-state (`ok`, `status: 'found' | 'not-found' | 'unknown'`), matching `dugganusa-scanner-core` v1.3.0. `found` is retained for backwards compatibility.
+- **HTTP status is now checked.** A non-2xx response carries a parseable JSON error body whose absent `correlations` was counted as "no hits". Applied to both the IOC lookup and the Tor relay check.
+- Failed lookups are no longer written to `iocCache` — caching an "unknown" would pin a wrong verdict for the full 5-minute TTL after the API recovered.
+- The status bar, the interactive lookup, and the workspace-scan summary now report unverified indicators separately and never describe them as clean. The Tor relay check no longer claims an IP "is NOT a known Tor relay" on a failed or timed-out lookup (the timeout previously resolved silently).
+
+### Changed
+- Lookup timeout raised from 5s to 15s. Measured `/search/correlate` latency is ~0.5-4s, so the old bound tripped on healthy responses; harmless when a timeout silently read as "clean", but noisy now that it correctly surfaces as unverified.
+
 ## [0.5.2] - 2026-06-30
 
 ### Fixed

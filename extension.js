@@ -76,7 +76,17 @@ function extractIOCs(document) {
 
 /**
  * Look up an IOC against the DugganUSA API.
- * Returns { found, data } or { found: false }
+ *
+ * Returns a TRI-STATE result, matching dugganusa-scanner-core v1.3.0:
+ *   { ok: true,  status: 'found',     found: true,  hits, data }
+ *   { ok: true,  status: 'not-found', found: false }
+ *   { ok: false, status: 'unknown',   found: false, error }
+ *
+ * `found` alone is NOT sufficient to conclude an indicator is clean. Every error
+ * path here used to resolve a bare { found: false } -- byte-identical to a
+ * verified-clean lookup -- so an expired API key, a rate limit, a 5xx outage, or
+ * the 5s timeout all silently rendered as "clean". Absence of evidence is not
+ * evidence of safety; callers must check `ok` before reporting a clean result.
  */
 async function lookupIOC(value, apiKey, apiUrl) {
   // Check cache first (TTL: 5 minutes)
@@ -90,10 +100,19 @@ async function lookupIOC(value, apiKey, apiUrl) {
     const headers = {};
     if (apiKey) headers['Authorization'] = 'Bearer ' + apiKey;
 
+    // Failures are deliberately NOT written to iocCache -- caching an "unknown"
+    // would pin a wrong verdict for the full 5-minute TTL after the API recovered.
+    const fail = (reason) => resolve({ ok: false, status: 'unknown', found: false, error: reason });
+
     const req = https.get(searchUrl.toString(), { headers }, (res) => {
       let body = '';
       res.on('data', chunk => body += chunk);
       res.on('end', () => {
+        // A non-2xx response (401 expired/missing key, 429 rate limit, 5xx
+        // outage) still carries a parseable JSON error body. Parsing it and
+        // reading the absent `correlations` as "no hits" is precisely how an
+        // outage used to read as clean. Treat it as a failed lookup.
+        if (res.statusCode < 200 || res.statusCode >= 300) return fail('HTTP ' + res.statusCode);
         try {
           const json = JSON.parse(body);
           const correlations = json.data?.correlations || {};
@@ -101,18 +120,24 @@ async function lookupIOC(value, apiKey, apiUrl) {
             .reduce((sum, hits) => sum + (Array.isArray(hits) ? hits.length : 0), 0);
 
           const result = totalHits > 0
-            ? { found: true, hits: totalHits, data: correlations }
-            : { found: false };
+            ? { ok: true, status: 'found', found: true, hits: totalHits, data: correlations }
+            : { ok: true, status: 'not-found', found: false };
 
           iocCache.set(value, { ts: Date.now(), result });
           resolve(result);
         } catch {
-          resolve({ found: false });
+          fail('invalid JSON response');
         }
       });
     });
-    req.on('error', () => resolve({ found: false }));
-    req.setTimeout(5000, () => { req.destroy(); resolve({ found: false }); });
+    req.on('error', (e) => fail(e.message || e.code || 'request failed'));
+    // 15s, raised from 5s. Measured /search/correlate latency runs ~0.5-4s, so a
+    // 5s bound tripped on healthy responses. That was harmless while a timeout
+    // silently read as "clean"; now that it correctly surfaces as "unverified",
+    // too tight a bound would cry wolf on every slow-but-fine lookup and teach
+    // users to ignore the warning -- which would recreate the fail-open defect
+    // socially rather than technically.
+    req.setTimeout(15000, () => { req.destroy(); fail('timeout after 15s'); });
   });
 }
 
@@ -153,7 +178,7 @@ async function scanDocument(document) {
   const iocs = extractIOCs(document);
   if (!iocs.length) {
     diagnosticCollection.set(document.uri, []);
-    return;
+    return { threats: 0, unverified: 0 };
   }
 
   const diagnostics = [];
@@ -163,8 +188,12 @@ async function scanDocument(document) {
 
   // Batch lookups (max 20 per scan to respect rate limits)
   const batch = iocs.slice(0, 20);
+  let unverified = 0;
   for (const ioc of batch) {
     const result = await lookupIOC(ioc.value, apiKey, apiUrl);
+    // An indicator we could not check is UNKNOWN, not clean. Count it so the
+    // status bar cannot claim "clean" for a scan that never actually completed.
+    if (!result.ok) { unverified++; continue; }
     if (result.found) {
       const summary = summarizeCorrelation(result.data);
       const diag = new vscode.Diagnostic(
@@ -183,10 +212,20 @@ async function scanDocument(document) {
   }
 
   diagnosticCollection.set(document.uri, diagnostics);
-  statusBar.text = diagnostics.length > 0
-    ? '$(warning) DugganUSA: ' + diagnostics.length + ' threat indicator(s) found'
-    : '$(shield) DugganUSA: clean';
+  // Never report "clean" when indicators could not be checked -- that is the
+  // fail-open defect this tri-state exists to prevent.
+  if (diagnostics.length > 0) {
+    statusBar.text = '$(warning) DugganUSA: ' + diagnostics.length + ' threat indicator(s) found' +
+      (unverified ? ' (' + unverified + ' unverified)' : '');
+  } else if (unverified) {
+    statusBar.text = '$(question) DugganUSA: ' + unverified + ' indicator(s) NOT verified (lookup failed)';
+  } else {
+    statusBar.text = '$(shield) DugganUSA: clean';
+  }
   setTimeout(() => statusBar.dispose(), 10000);
+  // Returned so callers (e.g. the workspace scan) can aggregate unverified
+  // indicators and avoid summarising a partly-failed scan as all clear.
+  return { threats: diagnostics.length, unverified };
 }
 
 /**
@@ -224,6 +263,16 @@ async function checkTorRelay() {
         let body = '';
         res.on('data', chunk => body += chunk);
         res.on('end', () => {
+          // Same fail-open class as lookupIOC: a non-2xx error body parses fine
+          // and yields an empty relay list, which would render as a confident
+          // "is NOT a known Tor relay" when we never actually got an answer.
+          if (res.statusCode < 200 || res.statusCode >= 300) {
+            vscode.window.showWarningMessage(
+              'DugganUSA Tor: could not check ' + ip + ' (HTTP ' + res.statusCode +
+              '). NOT verified - this is not a clean result.'
+            );
+            return resolve();
+          }
           try {
             const json = JSON.parse(body);
             const relays = json.data?.relays || json.data || [];
@@ -250,7 +299,14 @@ async function checkTorRelay() {
         vscode.window.showErrorMessage('DugganUSA: Could not reach Tor relay API.');
         resolve();
       });
-      req.setTimeout(5000, () => { req.destroy(); resolve(); });
+      req.setTimeout(5000, () => {
+        req.destroy();
+        // Previously resolved silently, which the user reads as "nothing found".
+        vscode.window.showWarningMessage(
+          'DugganUSA Tor: check for ' + ip + ' timed out. NOT verified - this is not a clean result.'
+        );
+        resolve();
+      });
     });
   });
 }
@@ -290,6 +346,13 @@ async function lookupSelection() {
           apiUrl + '/search/correlate?q=' + encodeURIComponent(text)
         ));
       }
+    } else if (!result.ok) {
+      // Distinguishable from clean, and shown as a warning rather than an info
+      // toast: the user asked a security question and did not get an answer.
+      vscode.window.showWarningMessage(
+        'DugganUSA: could not check ' + text + ' (' + (result.error || 'lookup failed') +
+        '). NOT verified - this is not a clean result.'
+      );
     } else {
       vscode.window.showInformationMessage(
         'DugganUSA: ' + text + ' — not found in 1.5M+ IOC index. Clean.'
@@ -378,15 +441,25 @@ function activate(context) {
         '**/node_modules/**', 50
       );
       let totalHits = 0;
+      let totalUnverified = 0;
       for (const file of files) {
         const doc = await vscode.workspace.openTextDocument(file);
-        await scanDocument(doc);
+        const res = await scanDocument(doc);
         totalHits += (diagnosticCollection.get(doc.uri) || []).length;
+        totalUnverified += (res && res.unverified) || 0;
       }
-      vscode.window.showInformationMessage(
-        'DugganUSA: Scanned ' + files.length + ' files. ' +
-        totalHits + ' threat indicator(s) found.'
-      );
+      // A scan with unverified indicators is an incomplete scan, not a clean
+      // one. Report it as a warning so "0 found" cannot be misread as "safe".
+      const summary = 'DugganUSA: Scanned ' + files.length + ' files. ' +
+        totalHits + ' threat indicator(s) found.';
+      if (totalUnverified) {
+        vscode.window.showWarningMessage(
+          summary + ' ' + totalUnverified + ' indicator(s) could NOT be checked (lookup failed) - ' +
+          'these are unverified, not clean.'
+        );
+      } else {
+        vscode.window.showInformationMessage(summary);
+      }
     }),
     vscode.commands.registerCommand('dugganusa.lookupSelection', lookupSelection),
     vscode.commands.registerCommand('dugganusa.checkTorRelay', checkTorRelay),
