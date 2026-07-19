@@ -1,8 +1,8 @@
 {
   "name": "dugganusa-threat-intel",
   "displayName": "DugganUSA Threat Intel Scanner",
-  "description": "Scans code for IPs, domains, hashes, and CVEs \u2014 checks each against 1M+ indicators of compromise in real-time. Powered by the DugganUSA STIX feed trusted by 275+ organizations.",
-  "version": "0.6.0",
+  "description": "Scans code for IPs, domains, hashes, and CVEs — checks each against 1M+ indicators of compromise in real-time. Powered by the DugganUSA STIX feed trusted by 275+ organizations.",
+  "version": "1.0.0",
   "publisher": "DugganUSALLC",
   "license": "MIT",
   "icon": "icon.png",
@@ -72,7 +72,7 @@
       },
       {
         "command": "dugganusa.aipmAudit",
-        "title": "DugganUSA: AIPM Audit \u2014 How Does AI See This Domain?"
+        "title": "DugganUSA: AIPM Audit — How Does AI See This Domain?"
       },
       {
         "command": "dugganusa.openStixFeed",

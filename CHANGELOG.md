@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.0.0] - 2026-07-19
+
+### Security - please read if you installed without an API key
+
+Lookups that did not succeed were reported as clean.
+
+Anonymous access to the DugganUSA API returns HTTP 401 (anonymous access was
+disabled after abuse), and the API key is optional in this extension. This
+extension never checked HTTP status: a 401, 429, 5xx, or timeout all parsed to
+an empty result and rendered as "no threats found".
+
+If you installed this extension without configuring an API key, every scan it
+performed returned clean regardless of what you scanned. Published versions up
+to and including 0.3.0 are affected. Treat any prior clean result from a
+keyless install as unverified, not as evidence of safety.
+
+### Changed
+
+- Lookups now return one of three states: found, not-found, or unknown.
+  Unknown is surfaced in the status bar, in workspace summaries, and on
+  interactive lookups. It is never rendered as clean.
+- HTTP status is checked before parsing a response.
+- Failed lookups are no longer cached, so a transient error cannot pin a wrong
+  verdict for the life of the cache.
+- Lookup timeout raised from 5s to 15s. Measured API latency is 0.5-4.0s, so a
+  5s ceiling tripped on healthy responses. Now that a timeout correctly reads
+  as unverified rather than clean, a too-tight timeout would produce constant
+  false warnings and train users to ignore them.
+
+### Why 1.0.0
+
+The output contract changed: a result that previously read as clean may now
+read as unverified. That is a breaking change for anyone acting on this
+extension's output, and it is the first release where the control does what it
+claims.
+
 ## [0.6.0] - 2026-07-19
 
 ### Security
