@@ -1,8 +1,8 @@
 {
   "name": "dugganusa-threat-intel",
   "displayName": "DugganUSA Threat Intel Scanner",
-  "description": "Scans code for IPs, domains, hashes, and CVEs — checks each against 1M+ indicators of compromise in real-time. Powered by the DugganUSA STIX feed trusted by 275+ organizations.",
-  "version": "1.0.0",
+  "description": "Scans code for IPs, domains, hashes, and CVEs — checks each against 1.9M+ indicators of compromise in real-time. Powered by the DugganUSA STIX feed.",
+  "version": "1.0.1",
   "publisher": "DugganUSALLC",
   "license": "MIT",
   "icon": "icon.png",

@@ -1,6 +1,6 @@
 # DugganUSA Threat Intel Scanner for VS Code
 
-**Scan your code for threat indicators in real-time. 1.5M+ IOCs. Cross-platform. Free registered key.**
+**Scan your code for threat indicators in real-time. 1.9M+ IOCs. Cross-platform. Free registered key.**
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
@@ -10,7 +10,7 @@
 
 ## What It Does
 
-Every IP address, domain, SHA256 hash, and CVE ID in your code is a potential indicator of compromise. This extension finds them automatically and checks each one against the [DugganUSA threat intelligence index](https://analytics.dugganusa.com) — the same STIX 2.1 feed trusted by 275+ organizations across 46 countries, including Fortune 500 security teams.
+Every IP address, domain, SHA256 hash, and CVE ID in your code is a potential indicator of compromise. This extension finds them automatically and checks each one against the [DugganUSA threat intelligence index](https://analytics.dugganusa.com) — the same STIX 2.1 feed published at analytics.dugganusa.com/api/v1/stix-feed.
 
 **Open a file. Save a file. The scanner runs.** Known-bad indicators appear as inline warnings with enrichment details — malware family, threat type, source, and cross-index hit count. No context switching. No browser tabs. No copy-paste into VirusTotal. The intelligence is in your editor where the code already is.
 
@@ -173,7 +173,7 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 
 ## What's In The Index
 
-**1.5M+ indicators** from:
+**1.9M+ indicators** from:
 
 - [OTX AlienVault](https://otx.alienvault.com/user/pduggusa) (16,800+ pulses)
 - [abuse.ch SSLBL](https://sslbl.abuse.ch/) + [URLhaus](https://urlhaus.abuse.ch/)
@@ -183,7 +183,7 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 - Exploit harvester (84 rules, GitHub scanning every 6h)
 - Edge honeypots (30 canary paths on Cloudflare Workers)
 
-Cross-correlated across **65 indexes**.
+Cross-correlated across **70 indexes**.
 
 Also available as [STIX 2.1 JSON](https://analytics.dugganusa.com/api/v1/stix-feed), [IP blocklist CSV](https://analytics.dugganusa.com/api/v1/stix-feed/ips.csv), [Domain CSV](https://analytics.dugganusa.com/api/v1/stix-feed/domains.csv), [Hash CSV](https://analytics.dugganusa.com/api/v1/stix-feed/hashes.csv).
 
