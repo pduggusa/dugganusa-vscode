@@ -1,10 +1,13 @@
 # DugganUSA Threat Intel Scanner for VS Code
 
-**Scan your code for threat indicators in real-time. 1.9M+ IOCs. Cross-platform. Free registered key.**
+**You do you. I do me. We share contexts.**
+
+Your editor keeps your code; the extension shares only the indicators it finds and brings back the DugganUSA Feed's context on each.
+
+**Scan your code for threat indicators in real-time. Cross-platform. Free registered key.** Corpus size: [live counts](https://analytics.dugganusa.com/api/v1/search/stats).
 
 [![VS Code Marketplace](https://img.shields.io/badge/VS%20Code-Marketplace-blue?logo=visual-studio-code)](https://marketplace.visualstudio.com/items?itemName=DugganUSALLC.dugganusa-threat-intel)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![STIX Consumers](https://img.shields.io/badge/STIX%20Consumers-275%2B-brightgreen)](https://analytics.dugganusa.com/api/v1/stix-feed)
 
 ---
 
@@ -18,7 +21,7 @@ Every IP address, domain, SHA256 hash, and CVE ID in your code is a potential in
 
 You open a config file. Line 42 has a hardcoded IP: `185.39.19.176`. The extension highlights it:
 
-> **DugganUSA: 185.39.19.176 — IOC: Cobalt Strike C2 (via SSLBL) | Blocked 47x | In 3 OTX pulse(s) (12 cross-index hits)**
+> **DugganUSA: 185.39.19.176 — IOC: Cobalt Strike C2 (via SSLBL) | Blocked 47x (12 cross-index hits)**
 
 Right-click, "View in DugganUSA" opens the full correlation in your browser.
 
@@ -43,7 +46,7 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 | **Right-click lookup** | Select any text, right-click, "DugganUSA: Look Up Selected Text" |
 | **Workspace scan** | Scan up to 50 files across your project in one command |
 | **Inline diagnostics** | Yellow squiggly warnings with enrichment in the Problems panel |
-| **Cross-index correlation** | Each indicator checked against IOCs, block events, OTX pulses, adversary profiles, CISA KEV, and more |
+| **Cross-index correlation** | Each indicator checked against IOCs, block events, adversary profiles, CISA KEV, and more |
 | **Smart filtering** | Skips known-safe IPs (localhost, DNS resolvers) and common domains |
 | **5-minute cache** | Results cached locally to minimize API calls |
 | **First-run setup** | Welcome walkthrough guides you through API key configuration |
@@ -147,14 +150,14 @@ Open the **Command Palette** (Ctrl+Shift+P / Cmd+Shift+P):
 
 The extension is **free and open source** (MIT). The API has tiered rate limits:
 
-| Tier | Queries/Day | Price |
-|------|------------|-------|
-| **Free** | 500 | $0 |
-| **Starter** | 1,000 | $45/mo |
-| **Researcher** | 2,000 | $145/mo |
-| **Professional** | 5,000 | $495/mo |
-| **Medusa Suite** | 50,000 | $8,995/mo |
-| **Enterprise** | Unlimited | $24,995/mo |
+| Tier | Price |
+|------|-------|
+| **Free** | $0, 10 queries/day |
+| **Shield** | $24/mo |
+| **Pro** | $99/mo or $948/yr |
+| **Enterprise** | $995/mo or $9,950/yr |
+
+Current limits and prices: [analytics.dugganusa.com/stix/pricing](https://analytics.dugganusa.com/stix/pricing).
 
 Register at [analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register).
 
@@ -173,17 +176,16 @@ Windows, macOS, Linux, [WSL](https://code.visualstudio.com/docs/remote/wsl), [Re
 
 ## What's In The Index
 
-**1.9M+ indicators** from:
+Indicators ([live counts](https://analytics.dugganusa.com/api/v1/search/stats)) from:
 
-- [OTX AlienVault](https://otx.alienvault.com/user/pduggusa) (16,800+ pulses)
 - [abuse.ch SSLBL](https://sslbl.abuse.ch/) + [URLhaus](https://urlhaus.abuse.ch/)
 - [Spamhaus DROP/EDROP](https://www.spamhaus.org/drop/)
-- [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) (1,568 entries)
+- [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
 - DugganUSA original research (supply chain Pattern 38-48)
 - Exploit harvester (84 rules, GitHub scanning every 6h)
 - Edge honeypots (30 canary paths on Cloudflare Workers)
 
-Cross-correlated across **70 indexes**.
+Cross-correlated across the whole corpus.
 
 Also available as [STIX 2.1 JSON](https://analytics.dugganusa.com/api/v1/stix-feed), [IP blocklist CSV](https://analytics.dugganusa.com/api/v1/stix-feed/ips.csv), [Domain CSV](https://analytics.dugganusa.com/api/v1/stix-feed/domains.csv), [Hash CSV](https://analytics.dugganusa.com/api/v1/stix-feed/hashes.csv).
 
@@ -333,7 +335,7 @@ Built by two people, one AI partner, and $75/month in infrastructure.
 <!-- DUGGANUSA-FAMILY-FOOTER-V1 -->
 ## DugganUSA Defender Family
 
-Same threat corpus, surfaced wherever you live. Open source, MIT licensed, receipts on every repo.
+Same DugganUSA Feed, surfaced wherever you live. Open source, MIT licensed, receipts on every repo.
 
 | Plugin | Surface |
 |---|---|
@@ -350,8 +352,8 @@ Same threat corpus, surfaced wherever you live. Open source, MIT licensed, recei
 | [dugganusa-cli](https://github.com/pduggusa/dugganusa-cli) | CLI scanner |
 | [dugganusa-chrome](https://github.com/pduggusa/dugganusa-chrome) | Chrome extension |
 | [dugganusa-action](https://github.com/pduggusa/dugganusa-action) | GitHub Action |
-| [dredd-mcp](https://github.com/pduggusa/dredd-mcp) | Pre-flight MCP security (this repo) |
+| [dredd-mcp](https://github.com/pduggusa/dredd-mcp) | Dredd: pre-flight MCP security |
 
-Backed by the live DugganUSA threat intel platform: [analytics.dugganusa.com](https://analytics.dugganusa.com).
+Backed by the [DugganUSA Feed](https://analytics.dugganusa.com/stix). Numbers are live: [/api/v1/search/stats](https://analytics.dugganusa.com/api/v1/search/stats). Pricing: [analytics.dugganusa.com/stix/pricing](https://analytics.dugganusa.com/stix/pricing). Contact: help@dugganusa.com.
 
-_Jeevesus saves. Dredd judges._
+_Threat intelligence you can check._
