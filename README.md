@@ -90,7 +90,7 @@ For more on installing extensions, see the [VS Code Extension Marketplace docs](
 
 Visit **[analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register)**. No credit card. No login. Takes 30 seconds.
 
-The DugganUSA feed is **API-key-enforced**. Anonymous requests and unregistered keys return `401`; a key past its daily limit returns `429`. The extension shows both as unknown, never clean. The free tier is a **free registered key** — not anonymous access — so register first, then drop the key into your settings. The free key allows **10 lookups a day**. With `scanOnOpen` and `scanOnSave` on (the defaults), one file can use up to 20, so on the free tier turn those off and use **DugganUSA: Look Up Selection** on demand, or see [pricing](https://analytics.dugganusa.com/stix/pricing).
+The DugganUSA feed is **API-key-enforced**. Anonymous requests and unregistered keys return `401`; a key past its daily limit returns `429`. The extension shows both as unknown, never clean. The free tier is a **free registered key** — not anonymous access — so register first, then drop the key into your settings. The free key allows **10 lookups a day**. With `scanOnOpen` and `scanOnSave` on (the defaults), one file can use up to 20, so on the free tier turn those off and use **DugganUSA: Look Up Selection** on demand, or see [pricing](https://analytics.dugganusa.com/pricing).
 
 ### 3. Configure
 
@@ -157,7 +157,7 @@ The extension is **free and open source** (MIT). The API has tiered rate limits:
 | **Pro** | $99/mo or $948/yr |
 | **Enterprise** | $995/mo or $9,950/yr |
 
-Current limits and prices: [analytics.dugganusa.com/stix/pricing](https://analytics.dugganusa.com/stix/pricing).
+Current limits and prices: [analytics.dugganusa.com/pricing](https://analytics.dugganusa.com/pricing).
 
 Register at [analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register).
 
@@ -354,6 +354,6 @@ Same DugganUSA Feed, surfaced wherever you live. Open source, MIT licensed, rece
 | [dugganusa-action](https://github.com/pduggusa/dugganusa-action) | GitHub Action |
 | [dredd-mcp](https://github.com/pduggusa/dredd-mcp) | Dredd: pre-flight MCP security |
 
-Backed by the [DugganUSA Feed](https://analytics.dugganusa.com/stix). Numbers are live: [/api/v1/search/stats](https://analytics.dugganusa.com/api/v1/search/stats). Pricing: [analytics.dugganusa.com/stix/pricing](https://analytics.dugganusa.com/stix/pricing). Contact: help@dugganusa.com.
+Backed by the [DugganUSA Feed](https://analytics.dugganusa.com/stix). Numbers are live: [/api/v1/search/stats](https://analytics.dugganusa.com/api/v1/search/stats). Pricing: [analytics.dugganusa.com/pricing](https://analytics.dugganusa.com/pricing). Contact: help@dugganusa.com.
 
 _Threat intelligence you can check._

@@ -489,9 +489,9 @@ function activate(context) {
     vscode.commands.registerCommand('dugganusa.openStixFeed', () => {
       try {
         vscode.commands.executeCommand('simpleBrowser.api.open',
-          vscode.Uri.parse('https://analytics.dugganusa.com/stix/pricing'));
+          vscode.Uri.parse('https://analytics.dugganusa.com/pricing'));
       } catch {
-        vscode.env.openExternal(vscode.Uri.parse('https://analytics.dugganusa.com/stix/pricing'));
+        vscode.env.openExternal(vscode.Uri.parse('https://analytics.dugganusa.com/pricing'));
       }
     })
   );
