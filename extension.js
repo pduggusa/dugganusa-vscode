@@ -254,7 +254,7 @@ async function checkTorRelay() {
     return new Promise((resolve) => {
       const searchUrl = new URL(apiUrl + '/tor/relays');
       searchUrl.searchParams.set('q', ip);
-      searchUrl.searchParams.set('limit', '1');
+      searchUrl.searchParams.set('limit', '5');
 
       const headers = {};
       if (apiKey) headers['Authorization'] = 'Bearer ' + apiKey;
@@ -275,8 +275,11 @@ async function checkTorRelay() {
           }
           try {
             const json = JSON.parse(body);
-            const relays = json.data?.relays || json.data || [];
-            if (Array.isArray(relays) && relays.length > 0) {
+            // /tor/relays returns { data: { hits: [...] } } and the search is fuzzy, so only an
+            // exact address match is a relay. Reading data.relays || data said "NOT a relay" always.
+            const hits = json.data?.hits || json.data?.relays || [];
+            const relays = Array.isArray(hits) ? hits.filter(h => h.address === ip || h.ip === ip) : [];
+            if (relays.length > 0) {
               const r = relays[0];
               const info = [
                 r.nickname ? 'Nickname: ' + r.nickname : null,

@@ -90,7 +90,7 @@ For more on installing extensions, see the [VS Code Extension Marketplace docs](
 
 Visit **[analytics.dugganusa.com/stix/register](https://analytics.dugganusa.com/stix/register)**. No credit card. No login. Takes 30 seconds.
 
-The DugganUSA feed is **API-key-enforced**. Anonymous requests return `401`; an unregistered Bearer token returns `429`. The free tier is a **free registered key** — not anonymous access — so register first, then drop the key into your settings. The free key covers full query volume for normal in-editor use.
+The DugganUSA feed is **API-key-enforced**. Anonymous requests and unregistered keys return `401`; a key past its daily limit returns `429`. The extension shows both as unknown, never clean. The free tier is a **free registered key** — not anonymous access — so register first, then drop the key into your settings. The free key allows **10 lookups a day**. With `scanOnOpen` and `scanOnSave` on (the defaults), one file can use up to 20, so on the free tier turn those off and use **DugganUSA: Look Up Selection** on demand, or see [pricing](https://analytics.dugganusa.com/stix/pricing).
 
 ### 3. Configure
 

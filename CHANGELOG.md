@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- **Check Tor Relay always answered "NOT a known Tor relay".** `/tor/relays` returns `data.hits`, never an array at `data`, and its search is fuzzy (`q=1.1.1.1` returns relay `89.247.27.1`). It now reads `data.hits` and requires an exact address match.
+- README: the free key is 10 lookups/day, not "full query volume"; unregistered keys get `401`, not `429`.
+
 ## [1.0.1] - 2026-09-29
 
 ### Security
