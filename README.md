@@ -244,7 +244,7 @@ The DugganUSA threat intel scanning engine is designed to run anywhere developer
 |----------|-------------|--------|-------|
 | **[Slack](https://api.slack.com/apps)** | Slack App Directory | Planned | Paste an IP in any channel, bot responds with enrichment. Enterprise-viral. |
 | **[Microsoft Teams](https://appsource.microsoft.com/)** | AppSource | Planned | We already see 23 Teams referrer sessions — people WANT this. |
-| **[Jira](https://marketplace.atlassian.com/)** | Atlassian Marketplace | Planned | We see `jira.cs.sys` referrers. Enrich security tickets with IOC context automatically. |
+| **[Jira](https://marketplace.atlassian.com/)** | Atlassian Marketplace | Planned | Enrich security tickets with IOC context automatically. |
 | **[ServiceNow](https://store.servicenow.com/)** | ServiceNow Store | Planned | Enterprise ITSM integration. |
 | **[Obsidian](https://obsidian.md/)** | [Community Plugins](https://obsidian.md/plugins) | Planned | OSINT researchers write notes in Obsidian. Paste an IP, get enrichment inline. |
 | **[Notion](https://www.notion.so/)** | API integration | Planned | Research documentation with inline IOC validation. |
