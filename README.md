@@ -61,12 +61,12 @@ Right-click, "View in DugganUSA" opens the full correlation in your browser.
 
 The IOC and CVE enrichment you see inline is only as good as the corpus behind it. As of this release, the DugganUSA platform exposes **four live, no-auth, durable validation endpoints** that let you (and your auditors) check feed quality for yourself — they survive deploys, so the numbers are real:
 
-- **Novelty** — [/api/v1/feed-uniqueness](https://analytics.dugganusa.com/api/v1/feed-uniqueness): measured live, roughly **75%+ of what we publish is NOT in ThreatFox**. The hits you catch in your editor are largely ones other feeds miss.
-- **Timeliness** — [/api/v1/kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead): a live ledger of how far ahead of CISA KEV we flagged each exploited CVE — positive leads, same-day, and no-receipt all shown honestly, with receipts. That `CVE-2026-21643` warning can land well before it shows up in the official catalog.
+- **Novelty** — [/api/v1/feed-uniqueness](https://analytics.dugganusa.com/api/v1/feed-uniqueness): how much of our independently sourced data is not already in ThreatFox, so you can see what this feed adds beside the feeds you already run.
+- **Timeliness** — [/api/v1/kev-lead](https://analytics.dugganusa.com/api/v1/kev-lead): a live ledger of when each exploited CVE entered our corpus next to its CISA KEV listing date, with receipts, including the ones we had no record of.
 - **Accuracy** — [/api/v1/spamhaus-validation](https://analytics.dugganusa.com/api/v1/spamhaus-validation): Spamhaus **independently corroborates** our first-hand contributions, an external accuracy signal on the calls we make.
 - **Liveness** — [/api/v1/feed-efficacy](https://analytics.dugganusa.com/api/v1/feed-efficacy): opt-in consumer reports of when our indicators actually fire on real traffic — proof the feed is operationally live, not just large.
 
-In short: the intel surfaced in your editor is sourced from a corpus that is independently **novel**, **early**, **corroborated**, and provably **live**. We cap our own claims at 95% honest confidence — there is always some noise, and we'd rather say so.
+In short: you can check the corpus behind your editor's warnings yourself, on novelty, timing, corroboration, and liveness. We cap our own claims at 95% honest confidence — there is always some noise, and we'd rather say so.
 
 ---
 
@@ -224,8 +224,8 @@ The DugganUSA threat intel scanning engine is designed to run anywhere developer
 | Platform | Marketplace | Status | Notes |
 |----------|-------------|--------|-------|
 | **[JetBrains](https://plugins.jetbrains.com/)** (IntelliJ, PyCharm, WebStorm, GoLand, Rider) | [JetBrains Marketplace](https://plugins.jetbrains.com/) | Planned | Java/Kotlin plugin, same regex + API pattern. Huge enterprise developer base. |
-| **[Neovim](https://neovim.io/) / Vim** | Native Lua plugin or [coc.nvim](https://github.com/neoclide/coc.nvim) | Planned | Terminal crowd. Small numbers, loudest advocates. |
-| **[Sublime Text](https://www.sublimetext.com/)** | [Package Control](https://packagecontrol.io/) | Planned | Still has loyalists. |
+| **[Neovim](https://neovim.io/) / Vim** | Native Lua plugin or [coc.nvim](https://github.com/neoclide/coc.nvim) | Planned | Terminal-first users. |
+| **[Sublime Text](https://www.sublimetext.com/)** | [Package Control](https://packagecontrol.io/) | Planned | Same regex + API pattern. |
 | **[Eclipse](https://www.eclipse.org/)** | [Eclipse Marketplace](https://marketplace.eclipse.org/) | Planned | Enterprise Java shops, government contractors. |
 | **[Zed](https://zed.dev/)** | Zed Extensions | Planned | Fast-growing editor with extension API. |
 | **[JupyterLab](https://jupyter.org/)** | [PyPI](https://pypi.org/) | Planned | Threat researchers live in notebooks. |
@@ -234,7 +234,7 @@ The DugganUSA threat intel scanning engine is designed to run anywhere developer
 
 | Platform | Marketplace | Status | Notes |
 |----------|-------------|--------|-------|
-| **Chrome** | [Chrome Web Store](https://chromewebstore.google.com/) | Planned | Every webpage becomes an IOC scanner. Highlights indicators on any page you read — including competitor blogs. |
+| **Chrome** | [Chrome Web Store](https://chromewebstore.google.com/) | Planned | Every webpage becomes an IOC scanner. Highlights indicators on any page you read, including other researchers' blogs. |
 | **Firefox** | [Firefox Add-ons](https://addons.mozilla.org/) | Planned | Same extension, WebExtension API compatible. |
 | **Safari** | [Safari Extensions](https://developer.apple.com/safari/extensions/) | Planned | macOS/iOS coverage. |
 
