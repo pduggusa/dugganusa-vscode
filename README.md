@@ -1,5 +1,7 @@
 # DugganUSA Threat Intel Scanner for VS Code
 
+**Docs:** https://docs.dugganusa.com/quickstart/
+
 **You do you. I do me. We share contexts.**
 
 Your editor keeps your code; the extension shares only the indicators it finds and brings back the DugganUSA Feed's context on each.
